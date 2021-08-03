@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 import json
 from form.models import Form
+from requests import get
+
 """
 from .serializers import FormSerializer
 """
@@ -17,14 +19,16 @@ def home_view(request):
     return render(request, "home.html")
 
 def registration(request):
+    ip = get('https://api.ipify.org').text
+    print("THE IP: "+ip)
     return render(request, "reg/index.html")
 
 def RegistrationAction(request):
+    ip = get('https://api.ipify.org').text
     email = request.POST.get('email', False);
+    username = request.POST.get('username', False);
     password = request.POST.get('password', False);
-    print(email, password)
-    red = redirect('/registration/')
-    return red
+    print(ip, email, username, password)
     return render(request, "reg/index.html")
 
 """
