@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
-from form.views import home_view, AddForm, RegistrationAction, registration
+from form.views import home_view, AddForm, RegistrationAction, registration, DashboardView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^home_view/$', home_view, name='home_view'),
     url(r'^RegistrationAction/$', RegistrationAction, name='RegistrationAction'),
     url(r'^registration/$', registration, name='registration'),
+    path('dashboard/', DashboardView),
 ]
