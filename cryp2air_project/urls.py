@@ -16,13 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
-from form.views import home_view, AddForm, RegistrationAction, registration, DashboardView
+from form.views import RegistrationAction, registration, DashboardView, login, LoginAction, registrationError, setcookie, getcookie, delcookie
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^AddForm/$', AddForm, name='AddForm'),
-    url(r'^home_view/$', home_view, name='home_view'),
     url(r'^RegistrationAction/$', RegistrationAction, name='RegistrationAction'),
+    url(r'^registrationError/$', registrationError, name='registrationError'),
     url(r'^registration/$', registration, name='registration'),
-    path('dashboard/', DashboardView),
+    url(r'^LoginAction/$', LoginAction, name='LoginAction'),
+    url(r'^login/$', login, name='login'),
+    path('dashboard/', DashboardView, name="Dashboard"),
+    path('scookie',setcookie),
+    path('gcookie',getcookie),
+    path('dcookie',delcookie)
 ]

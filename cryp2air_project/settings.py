@@ -106,7 +106,8 @@ DATABASES = {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         },
         'applications': [
-            'form.Users'
+            'form.Users',
+            'form.Session'
         ]
     },
     'default1': {
