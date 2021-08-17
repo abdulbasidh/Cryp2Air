@@ -11,39 +11,58 @@ import random
 
 # Create your views here.
 def DashboardView(request):
-    key = request.GET['ses']
-    data1 = Session.objects.get(token=key)
-    email = data1.email
-    data2 = Users.objects.get(email=email)
-    username = data2.username
-    context = {
-    "ses": key,
-    "email": email,
-    "username": username,
-    }
+    ses = request.GET['ses']
+    try:
+        if Session.objects.filter(token=ses).exists():
+            if Session.objects.filter(status="active").exists():
+                data1 = Session.objects.get(token=ses)
+                email = data1.email
+                data2 = Users.objects.get(email=email)
+                username = data2.username
+                context = {
+                "ses": ses,
+                "email": email,
+                "username": username,
+                }
+                return render(request, "dashboard.html", context)
+            else:
+                response = redirect('/login/')
+                return response
+        else:
+            response = redirect('/login/')
+            return response
+    except KeyError:
+        response = redirect('/login/')
+        return response
     return render(request, "dashboard.html", context)
 
-def SessionView(ses, request):
-    if Session.objects.filter(token=ses).exists():
+def logout(request):
+    ses = request.GET['ses']
+    try:
+        if Session.objects.filter(token=ses).filter(status="active").exists():
+            Session.objects.filter(token=ses).update(status="inactive")
+            response = redirect('/login/')
+            response.delete_cookie('ses')
+            return response
+
+        else:
+            response = redirect('/login/')
+            return response
+    except KeyError:
         response = redirect('/login/')
         return response
-    else:
-        response = redirect('/login/')
-        return response
+    return render(request, "page-login.html")
 
 def login(request):
     try:
         ses  = request.COOKIES['ses']
-        if Session.objects.filter(token=ses).exists():
-            if Session.objects.filter(status="active").exists():
-                response = redirect('/dashboard/?ses='+ses)
-                return response
-            else:
-                return render(request, "loginreg/login.html")
+        if Session.objects.filter(token=ses).filter(status="active").exists():
+            response = redirect('/dashboard/?ses='+ses)
+            return response
         else:
-            return render(request, "loginreg/login.html")
+            return render(request, "page-login.html")
     except KeyError:
-        return render(request, "loginreg/login.html")
+        return render(request, "page-login.html")
 
 def LoginAction(request):
     # Getting credentials
@@ -83,14 +102,14 @@ def LoginAction(request):
         return response
 
 def registration(request):
-    return render(request, "loginreg/registration.html")
+    return render(request, "page-register.html")
 
 def registrationError(request):
     key = request.GET['status']
     context = {
     "status": key,
     }
-    return render(request, "loginreg/registration.html", context)
+    return render(request, "page-register.html", context)
 
 def RegistrationAction(request):
 

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
-from form.views import RegistrationAction, registration, DashboardView, login, LoginAction, registrationError, setcookie, getcookie, delcookie
+from form.views import RegistrationAction, registration, DashboardView, login, LoginAction, registrationError, setcookie, getcookie, delcookie, logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^registration/$', registration, name='registration'),
     url(r'^LoginAction/$', LoginAction, name='LoginAction'),
     url(r'^login/$', login, name='login'),
+    url(r'^logout/$', logout, name='Logout'),
     path('dashboard/', DashboardView, name="Dashboard"),
     path('scookie',setcookie),
     path('gcookie',getcookie),
