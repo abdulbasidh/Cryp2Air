@@ -10,6 +10,7 @@ import string
 import random
 
 # Create your views here.
+"""
 def DashboardView(request):
     ses = request.GET['ses']
     try:
@@ -52,6 +53,7 @@ def logout(request):
         response = redirect('/login/')
         return response
     return render(request, "page-login.html")
+"""
 
 def login(request):
     try:
@@ -102,7 +104,15 @@ def LoginAction(request):
         return response
 
 def registration(request):
-    return render(request, "page-register.html")
+    try:
+        ses  = request.COOKIES['ses']
+        if Session.objects.filter(token=ses).filter(status="active").exists():
+            response = redirect('/dashboard/?ses='+ses)
+            return response
+        else:
+            return render(request, "page-register.html")
+    except KeyError:
+        return render(request, "page-register.html")
 
 def registrationError(request):
     key = request.GET['status']
@@ -110,6 +120,13 @@ def registrationError(request):
     "status": key,
     }
     return render(request, "page-register.html", context)
+
+def registrationConfirm(request):
+    key = request.GET['status']
+    context = {
+    "status": key,
+    }
+    return render(request, "page-login.html", context)
 
 def RegistrationAction(request):
 
@@ -140,7 +157,11 @@ def RegistrationAction(request):
         users.save()
 
         # Redirecting to dashboard
+        """
         response = redirect('/dashboard/?a='+username)
+        """
+        result="Your account is registered!"
+        response = redirect('/registrationConfirm/?status='+result)
 
         return response
         return render(request, "loginreg/registration.html")

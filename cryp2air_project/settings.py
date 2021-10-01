@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from dbrouter import DbByAppRouter, RestrictMigrations
 import os
+from django.db.backends.mysql.base import DatabaseWrapper
+DatabaseWrapper.data_types['DateTimeField'] = 'datetime'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'form',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -82,25 +85,12 @@ DATABASE_ROUTERS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'iJovVnBen9',
-        'USER': 'iJovVnBen9',
-        'PASSWORD': 'fDFZRcl3io',
-        'HOST': 'remotemysql.com',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        },
-        'applications': [                #  all models on some_app
-        ]
-    },
     'ext': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DQ9HVezLgI',
-        'USER': 'DQ9HVezLgI',
-        'PASSWORD': 'lblJF8SQ1B',
-        'HOST': 'remotemysql.com',
+        'NAME': 'sql6440937',
+        'USER': 'sql6440937',
+        'PASSWORD': 'ec7w8CJWE6',
+        'HOST': 'sql6.freemysqlhosting.net',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
@@ -110,7 +100,7 @@ DATABASES = {
             'form.Session'
         ]
     },
-    'default1': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
@@ -161,7 +151,6 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import dj_database_url
-DATABASES['default']['ENGINE'] = "django.db.backends.mysql"
 DATABASES['ext']['ENGINE'] = "django.db.backends.mysql"
 
 STATICFILES_DIRS = [
